@@ -57,8 +57,8 @@ function MenuBar(){
               </Offcanvas.Header>
                 <Offcanvas.Body className='m-3'>
                     <Nav className="ms-auto gap-4 offcanvas-body " id='offcanvasNavbar'>
-                      <Nav.Link as={Link} to="/">Home</Nav.Link>
-                      <Nav.Link as={Link} to="/" >Video List</Nav.Link>
+                      <Nav.Link as={Link} to="/">For You</Nav.Link>
+                      <Nav.Link as={Link} to="/videolist" >All Videos</Nav.Link>
                       <Nav.Link as={Link} to="/" >Contact Us</Nav.Link>
 
                       {isLoggedIn && isAdmin && (

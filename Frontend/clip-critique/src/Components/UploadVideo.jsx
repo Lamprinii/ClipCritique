@@ -20,6 +20,9 @@ function UploadVideo() {
 
 const [videoname, setvideoname] = useState("");
 const [videourl, setvideourl] = useState("");
+const [agerating, setagerating] = useState("");
+const [category, setcategory] = useState("");
+const [categories, setcategories] = useState([]);
 const {user} = useContext(UserContext);
 const navigate=useNavigate();
 
@@ -31,15 +34,42 @@ const handleInputChange = (e) => {
       setvideoname(value);
     } else if (name === 'videourl') {
       setvideourl(value);
-    }     
+    } else if (name === 'agerating') {
+      setagerating(value);
+    } else if (name === 'category') {
+
+    }
   }; 
 
+  useEffect(() => {
+    let categories = [];
+    categories.push({name: "Rap", id: "Rap"})  
+    categories.push({name: "Opera", id: "Opera"})  
+    categories.push({name: "Trap", id: "Trap"})  
+    categories.push({name: "Metal", id: "Metal"})  
+    categories.push({name: "Rock", id: "Rock"})  
+    categories.push({name: "K-pop", id: "Kpop"})  
+    categories.push({name: "Greek Laika", id: "GreekLaika"})  
+    categories.push({name: "Love Songs", id: "LoveSongs"})  
+    categories.push({name: "Country", id: "Country"})  
+    categories.push({name: "Nisiotika Music", id: "NisiotikaMusic"})  
+    categories.push({name: "Tsamiko", id: "Tsamiko"})  
+    categories.push({name: "Hpeirwtika", id: "Hpeirwtika"})  
+    categories.push({name: "Zeimpekiko", id: "Zeimpekiko"})  
+    categories.push({name: "Other", id: "Other"})  
+    setcategories(categories);
+  },[]);
+
   const handleButtonClick = () => {
-    videoService.addvideo(videourl, new Date(), videoname, user).then((response)=>{
+    videoService.addvideo(videourl, new Date(), videoname, user, category, agerating).then((response)=>{
         toast.success("The video was uploaded successfully.")
         navigate('/')
     });
   };
+
+  const change = (e) => {
+    setcategory (e.target.value);
+   }
 
     return (
         <Container fluid className="addshowtime-page w-500 align-items-center justify-content-center">
@@ -87,7 +117,32 @@ const handleInputChange = (e) => {
                           
                       </InputGroup>
                         </Form.Group>
-        
+                          <Form.Group className="mb-3 w-100" controlId="formDuration" >
+                            <Form.Label>Age Rating</Form.Label>
+                            <InputGroup className="mb-3">
+                            <Form.Control
+                          id='url'
+                          type="text"
+                          className="custom-fields" 
+                          placeholder="Age Rating" 
+                          name="agerating"
+                          value={agerating}
+                          onChange={handleInputChange}                                                    
+                        />
+
+                        <Form.Group className="mb-3 w-100" controlId="formDuration" >
+                        <Form.Label>Category</Form.Label>
+                        <InputGroup className="mb-3">
+                        <select id="categories" name="categorieslist" form="add-movie-form" onChange={change} value={category}>
+                        {categories.map((object, i) =>
+                              <option value={object.id}> {object.name} </option>)}
+                        </select>
+                        </InputGroup>
+
+                    </Form.Group>
+                          
+                      </InputGroup>
+                        </Form.Group>
                         <LoadingButton
                             name="Submit"    
                             loadingText="Submitting..."

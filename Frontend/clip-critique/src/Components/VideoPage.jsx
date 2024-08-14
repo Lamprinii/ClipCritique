@@ -21,6 +21,7 @@ function VideoPage(){
      const[isLoading, setisLoading] = useState(true);
      const {isLoggedIn,isAdmin,user} = useContext(UserContext);
      const [showDeleteModal, setShowDeleteModal] = useState(false);
+     const [flag, setflag] = useState(true) 
      const handleDeleteShow = () => setShowDeleteModal(true);
      const handleDeleteClose = () => setShowDeleteModal(false);
 
@@ -29,12 +30,18 @@ function VideoPage(){
       useEffect(( ) => {
           if (isLoading) {
             videoService.getVideoReview(videotemp.id).then((response) => {
-            let temp = new Video(videotemp.id, videotemp.imageurl,videotemp.url,videotemp.uploader, videotemp.videoname, response, videotemp.date, Math.floor(response), (response-Math.floor(response))*100)
+            console.log(videotemp)
+            let temp = new Video(videotemp.id, videotemp.imageurl,videotemp.url,videotemp.uploader, videotemp.videoname, response, videotemp.date, Math.floor(response), (response-Math.floor(response))*100, videotemp.category, videotemp.agerating, videotemp.artist)
         
-            console.log(temp)
+            //console.log(temp)
             setisLoading(false)
             setvideo(temp)
-            
+            if (flag == true) {
+              var vid = {
+                id:videotemp.id, 
+              };
+              ReviewService.addreview(user, vid, -1)
+            }
             })
           }
         
@@ -87,6 +94,21 @@ function VideoPage(){
   
           <div className='uploader'>
             {video.uploader}
+  
+          </div>
+          
+          <div className='uploader'>
+            Category: {video.category}
+  
+          </div>
+          
+          <div className='uploader'>
+            Artist: {video.artist}
+  
+          </div>
+
+          <div className='uploader'>
+            Age Rating: {video.agerating}
   
           </div>
   
@@ -179,14 +201,13 @@ function VideoPage(){
               var vid = {
                 id:videotemp.id, 
               };
-              console.log(vid);
-            ReviewService.addreview(user, vid, userrating).then((response)=>{
-              toast.success("The video was uploaded successfully.")
+              console.log(userrating);
+            ReviewService.updatereview(user, vid, userrating).then((response)=>{
+              toast.success("Your rating has been succesfully submitted.")
               setisLoading(true);
             });
             
             
-              
             } }>Submit</button>
             {isAdmin && isLoggedIn && (
               <Button variant="danger" size="lg" className="report-video-button" onClick={() => handleDeleteShow(video)}>

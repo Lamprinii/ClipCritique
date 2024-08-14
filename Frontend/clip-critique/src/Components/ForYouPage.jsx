@@ -11,21 +11,22 @@ import { UserContext } from '../App';
 import { toast } from 'react-toastify';
 
 
-function VideoList() {
+function ForYouPage() {
 
 
 const navigate=useNavigate();
 const[videos,setVideos]=useState([])
 const[isLoading, setisLoading] = useState(true);
-const {isLoggedIn,isAdmin} = useContext(UserContext);
+const {isLoggedIn,isAdmin,user} = useContext(UserContext);
+
 
 useEffect(() => {
   if (!isLoggedIn) {
     toast.error("You need to login to view the application")
     navigate("/login")
   }
-  if (isLoading) {
-      videoService.getVideo().then((response) => {
+  if (isLoading && isLoggedIn) {
+      videoService.getSuggestedVideo(user.id).then((response) => {
       console.log(response.length)
       for (let i=0; i<response.length; i++) {
         if((videos.length<response.length)){
@@ -47,7 +48,7 @@ useEffect(() => {
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"/>
       
           <h1>
-              Videos
+          For You
           </h1>
       
           <div className='add-movie-button' onClick={()=>{
@@ -62,7 +63,7 @@ useEffect(() => {
             </a>
 
           </div>
-          
+            
                 {videos.map((video)=>(
       
                 <div className="video-container" onClick={()=>{
@@ -108,4 +109,4 @@ useEffect(() => {
    
 }
 
-export default VideoList;
+export default ForYouPage;

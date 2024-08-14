@@ -12,10 +12,11 @@ import LoadingButton from './LoadingButton';
 import {FaEyeSlash, FaEye} from 'react-icons/fa';
 import authService from '../services/auth.service';
 import { useNavigate } from 'react-router-dom';
+import QuestionnaireModal from './QuestionnaireModal';
 
 
 import './Style/Register.css'; // Import the external CSS file
-//import { counter } from '@fortawesome/fontawesome-svg-core';
+
 
 const Register = () => {
 
@@ -23,6 +24,9 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [fullName, setfullName] = useState("");
+  const [dateOfBirth, setdateOfBirth] = useState("");
+  const [user, setuser] = useState("");
+
 
 
   const navigate = useNavigate();
@@ -37,19 +41,29 @@ const Register = () => {
       setfullName(value);
     } else if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
+    } else if (name === 'dateOfBirth') {
+      setdateOfBirth(value);
     }
   };
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [showQuestionnaireModal, setQuestionnaireModal] = useState(false);
+
+  const handleEditUserClose =() =>  { setQuestionnaireModal(false);
+    navigate("/");
+  }
+
 
 
   const handleButtonClick = () => {
-    counter=0;
+    let counter=0;
     document.getElementById('email').classList.remove('error');
     document.getElementById('pass').classList.remove('error');
     document.getElementById('full').classList.remove('error');
     document.getElementById('passconf').classList.remove('.error');
+    document.getElementById('dateOfBirth').classList.remove('.error');
+
 
     if (email === ''|| !(email.includes('@'))) {
       document.getElementById('email').classList.add('error');
@@ -60,6 +74,9 @@ const Register = () => {
     }if (fullName === '') {
       document.getElementById('full').classList.add('error');
       counter++;
+    }if (dateOfBirth === '') {
+      document.getElementById('dateOfBirth').classList.add('error');
+      counter++;
     }if (passwordConfirm === '') {
       document.getElementById('passconf').classList.add('error');
       counter++;
@@ -69,9 +86,9 @@ const Register = () => {
       counter++;
     }
     if (counter==0){
-      authService.register(fullName,email,password).then((response)=>{
-        console.log(response.data);
-        navigate("/");
+      authService.register(fullName,email,password,dateOfBirth).then((response)=>{
+        setuser(response.data)
+        setQuestionnaireModal(true)
       }).catch((err)=>{
         console.log(err);
       })
@@ -111,6 +128,21 @@ const Register = () => {
 
                   </Form.Group>
 
+                  <Form.Group className="mb-3 w-100" controlId="formStartDate" >
+                        <Form.Label>Date of Birth</Form.Label>
+                        <InputGroup className="mb-3">
+                            <Form.Control
+                            id="dateOfBirth" 
+                            type="date"
+                            className="custom-fields" 
+                            placeholder="Date of Birth"
+                            name="dateOfBirth"
+                            value={dateOfBirth}
+                            onChange={handleInputChange}
+                            />
+                        </InputGroup>
+
+                    </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formEmail">
                     <Form.Label>Email</Form.Label>
@@ -184,7 +216,15 @@ const Register = () => {
           </Card>
         </Col>
       </Row>
-    </Container>
+      {showQuestionnaireModal && (<QuestionnaireModal
+                show={showQuestionnaireModal}
+                onHide={() => setQuestionnaireModal(false)}
+                showModal = {() => setQuestionnaireModal(true)}
+                closeModal = {handleEditUserClose}   
+                user = {user}         
+        />
+        )}
+    </Container>  
   );
 };
 

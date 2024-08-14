@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './Components/ProtectedRoute';
 import AdminPanelUsers from './Components/admin-panel/AdminPanelUsers';
 import refreshPageService from './services/refresh.page.service.js';
+import ForYouPage from './Components/ForYouPage.jsx';
 
 export const UserContext = createContext();
 
@@ -73,10 +74,12 @@ function App() {
         </MenuBar>
       </header>
       <Routes>
-      <Route exact path="/" element={<VideoList />} />
+      <Route exact path="/" element={<ForYouPage />} />
+      <Route exact path="/videolist" element={<VideoList />} />
       <Route path="/video" element={<VideoPage />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
+
 
       <Route path="/admin-panel/users" 
                 element={

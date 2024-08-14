@@ -10,13 +10,31 @@ class VideoService {
         });
     }
 
-    addvideo(link,uploadDateTime,name,uploader){
+    getSuggestedVideo(user_id){ 
+      return api
+      .get("/video/personalize/"+user_id)
+      .then(response => {
+        return response.data;
+      });
+  }
+
+    getQuestionnaire(){
+      return api
+      .get("/question/")
+      .then(response => {
+        return response.data;
+      });
+  }
+
+    addvideo(link,uploadDateTime,name,uploader,category,agerating){
       return api
       .post("/video/",{
           link,
           uploadDateTime,
           name,
-          uploader
+          uploader,
+          category,
+          agerating
       })
       .then(response => {
           return response.data;

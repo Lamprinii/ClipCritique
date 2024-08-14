@@ -18,11 +18,12 @@ class AuthService {
     return api.get("/user/logout");
   }
 
-  register(fullName, email, password) {
+  register(fullName, email, password, dateOfBirth) {
     return api.post("/user/register", {
       fullName,
       email,
       password,
+      dateOfBirth,
     });
   }
 
