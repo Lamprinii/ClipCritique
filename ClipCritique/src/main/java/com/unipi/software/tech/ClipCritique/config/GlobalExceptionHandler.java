@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException {
 
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleIEntityNotFoundException(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
